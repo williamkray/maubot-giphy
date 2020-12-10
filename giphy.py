@@ -28,7 +28,7 @@ class GiphyPlugin(Plugin):
         
         data = await resp.read()
         mime = info['mime'] 
-        filename = f"{query}.gif"
+        filename = f"{query}.gif" if 'query' in locals() else "giphy.gif"
         uri = await self.client.upload_media(data, mime_type=mime, filename=filename)
 
         await self.client.send_image(room_id, url=uri, file_name=filename,
