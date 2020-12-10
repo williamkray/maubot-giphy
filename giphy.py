@@ -1,7 +1,7 @@
 from typing import Type
 import urllib.parse
 import random
-from mautrix.types import RoomID
+from mautrix.types import RoomID, ImageInfo
 from mautrix.util.config import BaseProxyConfig, ConfigUpdateHelper
 from maubot import Plugin, MessageEvent
 from maubot.handlers import command
@@ -20,17 +20,23 @@ class GiphyPlugin(Plugin):
         await super().start()
         self.config.load_and_update()
 
-    async def send_gif(self, room_id: RoomID, gif_link: str, query: str) -> None:
+    async def send_gif(self, room_id: RoomID, gif_link: str, query: str, info: dict) -> None:
         resp = await self.http.get(gif_link)
         if resp.status != 200:
             self.log.warning(f"Unexpected status fetching image {url}: {resp.status}")
             return None
         
         data = await resp.read()
-        mime = "image/gif" # this really shouldn't change
-        uri = await self.client.upload_media(data, mime_type=mime)
+        mime = info['mime'] 
+        filename = f"{query}.gif"
+        uri = await self.client.upload_media(data, mime_type=mime, filename=filename)
 
-        await self.client.send_image(room_id, url=uri, file_name=f"{query}.gif")
+        await self.client.send_image(room_id, url=uri, file_name=filename,
+                info=ImageInfo(
+                        mimetype=info['mime'],
+                        width=info['width'],
+                        height=info['height']
+                    ))
 
     @classmethod
     def get_config_class(cls) -> Type[BaseProxyConfig]:
@@ -59,6 +65,10 @@ class GiphyPlugin(Plugin):
         # Retrieve gif link from JSON response
         try:
             gif_link = data['data']['images']['original']['url']
+            info = {}
+            info['width'] = data['data']['images']['original']['width']
+            info['height'] = data['data']['images']['original']['height']
+            info['mime'] = 'image/gif' # this shouldn't really change
         except Exception as e:
             await evt.respond("sorry, i'm drawing a blank")
             return None
@@ -68,6 +78,6 @@ class GiphyPlugin(Plugin):
         elif response_type == "reply":
             await evt.reply(gif_link, allow_html=True)  # Reply to user
         elif response_type == "upload":
-            await self.send_gif(evt.room_id, gif_link, search_term) # Upload the GIF to the room
+            await self.send_gif(evt.room_id, gif_link, search_term, info) # Upload the GIF to the room
         else:
             await evt.respond("something is wrong with my config, be sure to set a response_type")
