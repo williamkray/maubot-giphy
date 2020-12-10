@@ -6,10 +6,10 @@
 maubot: 0.1.0
 
 # The unique ID for the plugin. Java package naming style. (i.e. use your own domain, not xyz.maubot)
-id: casavant.tom.giphy
+id: org.jobmachine.giphy
 
 # A PEP 440 compliant version string.
-version: 1.0.5
+version: 1.1.0
 
 # The SPDX license identifier for the plugin. https://spdx.org/licenses/
 # Optional, assumes all rights reserved if omitted.
