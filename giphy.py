@@ -70,7 +70,7 @@ class GiphyPlugin(Plugin):
             info['height'] = data['data']['images']['original']['height']
             info['mime'] = 'image/gif' # this shouldn't really change
         except Exception as e:
-            await evt.respond("sorry, i'm drawing a blank")
+            await evt.respond("i'm getting coffee. come back later.")
             return None
 
         if response_type == "message":
