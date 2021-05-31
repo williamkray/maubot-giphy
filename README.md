@@ -14,3 +14,12 @@ This project was forked from [TomCasavant/GiphyMaubot](https://github.com/TomCas
 ## Usage
 '!giphy word' - Bot replies with a link to a gif given the search term
 '!giphy' - Bot replies with a link to a random gif
+
+**NOTE: random gif response is currently broken.** This is for a couple reasons:
+
+  1. The Giphy "translate" api endpoint has recently turned into hot garbage, so the code was refactored to use the
+     "search" api endpoint, and pick a random gif from the top 5 results.
+  2. The "search" endpoint uses a different letter for mysterious reasons to identify the query string to use (`q`
+     instead of `s`)
+  3. I'm too lazy to go through the trouble of writing an if/else statement to modify that letter for a feature that
+     frankly nobody has ever used even once in the time I've been running my bot.
