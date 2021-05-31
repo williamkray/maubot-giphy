@@ -51,10 +51,10 @@ class GiphyPlugin(Plugin):
             search_term = ""
             source = self.config["source"]
         else:
-            source = "translate"
+            source = "search"
 
         api_key = self.config["api_key"]
-        url_params = urllib.parse.urlencode({"s": search_term, "api_key": api_key})
+        url_params = urllib.parse.urlencode({"q": search_term, "api_key": api_key, "limit": 5})
         response_type = self.config["response_type"]
         # Get random gif url using search term
         async with self.http.get(
@@ -64,13 +64,14 @@ class GiphyPlugin(Plugin):
 
         # Retrieve gif link from JSON response
         try:
-            gif_link = data['data']['images']['original']['url']
+            picked_gif = random.choice(data['data'])
+            gif_link = picked_gif['images']['original']['url']
             info = {}
-            info['width'] = data['data']['images']['original']['width']
-            info['height'] = data['data']['images']['original']['height']
+            info['width'] = picked_gif['images']['original']['width'] or 480
+            info['height'] = picked_gif['images']['original']['height'] or 270
             info['mime'] = 'image/gif' # this shouldn't really change
         except Exception as e:
-            await evt.respond("i'm getting coffee. come back later.")
+            await evt.respond(f"Something went wrong: {e.message}")
             return None
 
         if response_type == "message":
