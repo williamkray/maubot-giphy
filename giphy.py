@@ -35,7 +35,8 @@ class GiphyPlugin(Plugin):
                 info=ImageInfo(
                         mimetype=info['mime'],
                         width=info['width'],
-                        height=info['height']
+                        height=info['height'],
+                        size=info['size']
                     ))
 
     @classmethod
@@ -69,9 +70,10 @@ class GiphyPlugin(Plugin):
             info = {}
             info['width'] = picked_gif['images']['original']['width'] or 480
             info['height'] = picked_gif['images']['original']['height'] or 270
+            info['size'] = picked_gif['images']['original']['size']
             info['mime'] = 'image/gif' # this shouldn't really change
         except Exception as e:
-            await evt.respond(f"Something went wrong: {e.message}")
+            await evt.respond(f"Something went wrong, most likely there were no results 😢")
             return None
 
         if response_type == "message":
