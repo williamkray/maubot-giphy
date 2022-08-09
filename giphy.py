@@ -23,7 +23,7 @@ class GiphyPlugin(Plugin):
     async def send_gif(self, room_id: RoomID, gif_link: str, query: str, info: dict) -> None:
         resp = await self.http.get(gif_link)
         if resp.status != 200:
-            self.log.warning(f"Unexpected status fetching image {url}: {resp.status}")
+            await evt.respond(f"Unexpected status fetching image {url}: {resp.status}")
             return None
         
         data = await resp.read()
