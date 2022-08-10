@@ -68,9 +68,9 @@ class GiphyPlugin(Plugin):
             picked_gif = random.choice(data['data'])
             gif_link = picked_gif['images']['original']['url']
             info = {}
-            info['width'] = picked_gif['images']['original']['width'] or 480
-            info['height'] = picked_gif['images']['original']['height'] or 270
-            info['size'] = picked_gif['images']['original']['size']
+            info['width'] = int(picked_gif['images']['original']['width']) or 480
+            info['height'] = int(picked_gif['images']['original']['height']) or 270
+            info['size'] = int(picked_gif['images']['original']['size'])
             info['mime'] = 'image/gif' # this shouldn't really change
         except Exception as e:
             await evt.respond(f"Something went wrong, most likely there were no results 😢")
