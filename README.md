@@ -1,4 +1,7 @@
 # Giphy Maubot
+
+NOTICE: this fork is no longer maintained, please use [GifMe](https://github.com/williamkray/maubot-gifme) instead.
+
 A simple [maubot](https://github.com/maubot/maubot) that generates a random gif given a search term.
 This project was forked from [TomCasavant/GiphyMaubot](https://github.com/TomCasavant/GiphyMaubot), which was a great starting point, but I wanted to see a few more changes.
 
